@@ -59,7 +59,7 @@
             }
             return htmlMenu;
         }, funSmartMenu = function() {
-            //TODO 修改为事件代理
+            //TODO Modification Event Proxy 
             var idKey = "#smartMenu_", clKey = "smart_menu_", jqueryMenu = $(idKey + params.name);
             if (!jqueryMenu.length) {
                 $("body").append(htmlCreateMenu());

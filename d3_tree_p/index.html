@@ -367,13 +367,12 @@
 
   // add data to parent when double click
     function dblclick(d) {
-      // 若无d.data.children，则视为未获取
+      // if no d.data.children, treated as no children
       if (!(d.data && d.data.children)) {
-        // 这里模拟请求，1.json - 5.json 随机获取数据
         var randomNum = Math.floor(Math.random() * 5) + 1;
         d3.json("1.json", function (error, data) {
           if (error) throw error;
-          // 给子节点绑定父节点
+          // connect parent node to children's node
           var children = data.children.map(x => {
             return {
               name: x.name,
@@ -384,9 +383,9 @@
               }
             }
           });
-          // 将子节点数据绑定在d节点上
+          // Binding children's data to d node
           if (children.length) d.children = children;
-          // 同时也绑到data上
+          // and also to data
           d.data.children = children;
           updateChart(d);
         });
@@ -394,7 +393,7 @@
     }
 
 
-    // collapse方法，切换子节点展开收起
+    // collapse zoom in or zoom out. 
     function collapse(d) {
       if (d.children) {
         d._children = d.children;
@@ -403,7 +402,7 @@
       }
     }
 
-    // 添加贝塞尔曲线的path，衔接与父节点和子节点间
+    // Connect parent and children by adding curve path
     function diagonal(s, d) {
       path =
         `M ${s.y} ${s.x}
@@ -414,7 +413,7 @@
       return path;
     }
 
-    // 添加贝塞尔曲线的path，方向为父节点指向子节点
+    // Add curve path. Direction is from Parent to Children
     function diagonalReverse(s = {}, d = {}) {
       path =
       `M ${d.y} ${d.x}
@@ -424,7 +423,7 @@
         return path;
     }
 
-    // 获取最多的子节点数
+    // Get the maximum num of children nodes. 
     function getMax(obj) {
       let max = 0;
       if (obj.children) {
