@@ -245,7 +245,8 @@ class App extends Component {
 
   addChildNode = () => {
     const data = clone(this.state.data);
-    const target = data[0].children ? data[0].children : data[0]._children;
+    var target = data.children;
+    // const target = data[0].children ? data[0].children : data[0]._children;
     this.addedNodesCount++;
     target.push({
       name: `Inserted Node ${this.addedNodesCount}`,
@@ -258,7 +259,8 @@ class App extends Component {
 
   removeChildNode = () => {
     const data = clone(this.state.data);
-    const target = data[0].children ? data[0].children : data[0]._children;
+    var target = data.children;
+    // const target = data[0].children ? data[0].children : data[0]._children;
     target.pop();
     this.addedNodesCount--;
     this.setState({
@@ -319,7 +321,7 @@ class App extends Component {
                 </div>
               </div>
 
-              {/* <div className="prop-container">
+              <div className="prop-container">
                 <h4 className="prop">
                   Dynamically updating <code>data</code>
                 </h4>
@@ -337,7 +339,7 @@ class App extends Component {
                 >
                   Remove Node
                 </button>
-              </div> */}
+              </div>
 
               <div className="prop-container">
                 <h4 className="prop">Orientation</h4>
@@ -659,6 +661,7 @@ class App extends Component {
               Total nodes in tree: {this.state.totalNodeCount}
             </div>
             <div ref={tc => (this.treeContainer = tc)} className="tree-container">
+              {/* <button onClick={this.addChildNode}>Remove Node</button> */}
               <Tree
                 hasInteractiveNodes
                 data={this.state.data}
