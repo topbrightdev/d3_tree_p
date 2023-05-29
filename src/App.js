@@ -74,9 +74,9 @@ const countNodes = (count = 0, n) => {
 
 // add data to Json file
 
-const addDataToJsonFile = () => {
-  const newData = { name: 'John', age: 25 }; // Example new data to add
-  axios.post('http://localhost:8080/api/add-node', newData)
+const addDataToJsonFile = async () => {
+   const newData = { name: 'John', age: 25 }; // Example new data to add
+  await axios.post('http://localhost:8080/api/add-node', newData)
     .then(response => {
       console.log('Data added to JSON file successfully');
     })

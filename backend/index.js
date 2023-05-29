@@ -3,6 +3,8 @@ const fs = require('fs');
 const app = express();
 const cors = require('cors');
 app.use(cors());
+app.use(express.json());
+const util = require('util');
 
 app.get('/', (req, res) => {
     res.send('Hello, World!');
@@ -14,16 +16,13 @@ app.post('/api/add-node', (req, res) => {
     // let updatedData;
 
     fs.readFile('../src/examples/org-chart.json', 'utf8', (err, data) => {
-        console.log("123"); 
         if (err) {
             console.error('Error reading JSON file:', err);
         } else {
             originData = JSON.parse(data);
-            console.log('JSON data:', originData);
+            console.log(util.inspect(originData, { depth: null }));
         }
     });
-    // console.log("arrived"); 
-    console.log(req.body); 
     // fs.writeFile('../src/examples/org-chart.json', updatedData, (err) => {
     //     if (err) {
     //       console.error('Error writing JSON file:', err);
