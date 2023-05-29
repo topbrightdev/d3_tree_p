@@ -12,7 +12,7 @@ import './App.css';
 import orgChartJson from './examples/org-chart.json';
 import flareJson from './examples/d3-hierarchy-flare.json';
 import reactTree from './examples/reactRepoTree';
-
+import axios from 'axios'; 
 console.log('Demo React version: ', React.version);
 
 const customNodeFnMapping = {
@@ -70,6 +70,22 @@ const countNodes = (count = 0, n) => {
   // Keep traversing children while updating `count` until we reach the base case.
   return n.children.reduce((sum, child) => countNodes(sum, child), count);
 };
+
+
+// add data to Json file
+
+const addDataToJsonFile = () => {
+  const newData = { name: 'John', age: 25 }; // Example new data to add
+  axios.post('http://localhost:8080/api/add-node', newData)
+    .then(response => {
+      console.log('Data added to JSON file successfully');
+    })
+    .catch(error => {
+      console.error('Error adding data to JSON file:', error);
+    });
+};
+
+
 
 class App extends Component {
   constructor() {
@@ -328,7 +344,8 @@ class App extends Component {
                 <button
                   type="button"
                   className="btn btn-controls btn-block"
-                  onClick={() => this.addChildNode()}
+                  // onClick={() => this.addChildNode()}
+                  onClick={addDataToJsonFile}
                 >
                   Insert Node
                 </button>
