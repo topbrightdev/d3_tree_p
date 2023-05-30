@@ -32,7 +32,7 @@ const PureSvgNodeElement = ({ nodeDatum, orientation, toggleNode, onNodeClick })
   return (
     <>
       <circle r={20} onClick={toggleNode}></circle>
-      <rect width = {60} height = {40} fill = {'black1'} transform={`translate(${ -30 },${ -20 })`} onClick={toggleNode}></rect>
+      <rect width = {60} height = {40} fill = {'#00F000'} transform={`translate(${ -30 },${ -20 })`} onClick={toggleNode}></rect>
       <g className="rd3t-label">
         <text
           className="rd3t-label__title"

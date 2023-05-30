@@ -53,10 +53,15 @@
 }
 
 .tree-container {
-  height: 100%;
+  height: 70%;
+  width: 80%;
+  border: 5px solid black;
+  margin: auto;
   /* background: #ccf6c8; */
 }
-
+.add_pos {
+  margin: 10px 0px; 
+}
 .prop-container {
   padding: 2px 5px;
   margin: 15px 10px;

@@ -9,7 +9,7 @@ import MixedNodeInputElement from './components/MixedNodeInputElement';
 import './App.css';
 
 // Data examples
-import orgChartJson from './examples/org-chart.json';
+import orgChartJson from './examples/3.json';
 import flareJson from './examples/d3-hierarchy-flare.json';
 import reactTree from './examples/reactRepoTree';
 import axios from 'axios'; 
@@ -134,6 +134,7 @@ class App extends Component {
           },
         },
       },
+      selectedOption: '', 
     };
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -149,6 +150,7 @@ class App extends Component {
     this.setScaleExtent = this.setScaleExtent.bind(this);
     this.setSeparation = this.setSeparation.bind(this);
     this.setNodeSize = this.setNodeSize.bind(this);
+    this.selectChange = this.selectChange.bind(this); 
   }
 
   setTreeData(data) {
@@ -224,7 +226,9 @@ class App extends Component {
   toggleDraggable() {
     this.setState(prevState => ({ draggable: !prevState.draggable }));
   }
-
+  selectChange = (event) => {
+    this.setState({ selectedOption: event.target.value });
+  }
   toggleCenterNodes() {
     if (this.state.dimensions !== undefined) {
       this.setState({
@@ -284,6 +288,25 @@ class App extends Component {
     });
   };
 
+  getAllNames = (data) => { // get the names of nodes
+    const names = [];
+
+    function traverse(obj) {
+      if (obj && obj.name) {
+        names.push(obj.name);
+      }
+
+      if (obj && obj.children && obj.children.length > 0) {
+        obj.children.forEach(child => traverse(child));
+      }
+      console.log(names); 
+    }
+
+    traverse(data);
+
+    return names;
+  };
+
   componentDidMount() {
     const dimensions = this.treeContainer.getBoundingClientRect();
     this.setState({
@@ -291,8 +314,12 @@ class App extends Component {
       translateY: dimensions.height / 2,
     });
   }
+  
 
   render() {
+
+    // const options = ['option1', 'option2', 'option3']; 
+    const options = this.getAllNames(this.state.data);
     return (
       <div className="App">
         <div className="demo-container">
@@ -349,6 +376,11 @@ class App extends Component {
                 >
                   Insert Node
                 </button>
+                <select className='form-control add_pos' value={this.state.selectedOption} onChange={this.selectChange}>
+                  {options.map((option, index) => (
+                    <option key={index} value={option}>{option}</option>
+                  ))}
+                </select>
                 <button
                   type="button"
                   className="btn btn-controls btn-block"
