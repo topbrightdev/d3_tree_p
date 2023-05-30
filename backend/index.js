@@ -11,28 +11,52 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/add-node', (req, res) => {
-    let originData;
-    // let newData = req.body;
-    // let updatedData;
-
-    fs.readFile('../src/examples/org-chart.json', 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading JSON file:', err);
-        } else {
-            originData = JSON.parse(data);
-            console.log(util.inspect(originData, { depth: null }));
+    console.log(req.body); 
+    const jsonData = fs.readFileSync('../src/examples/1.json', 'utf8');
+    const objData = JSON.parse(jsonData);
+    
+    const findNodeByName = (nodeName, node) => {
+        if (node.name === nodeName) {
+          // If the node has the desired name, return it
+          return node;
+        } 
+        else if (node.children) {
+          // If the node has children, recursively search them
+          for (let i = 0; i < node.children.length; i++) {
+            const foundNode = findNodeByName(nodeName, node.children[i]);
+            if (foundNode) {
+              // If the node is found in the children, return it
+              return foundNode;
+            }
+          }
         }
-    });
-    // fs.writeFile('../src/examples/org-chart.json', updatedData, (err) => {
-    //     if (err) {
-    //       console.error('Error writing JSON file:', err);
-    //     } else {
-    //       console.log('JSON data written to file successfully');
-    //     }
-    // });
+      
+        // If the node is not found, return undefined
+        return undefined;
+    };
+      
+      const targetNode = findNodeByName(req.body.pos, objData);
+      
+      if (targetNode) {
+        console.log('Node found:', targetNode);
+      } else {
+        console.log('Node not found!');
+      }
 
-    // Send response
-    res.send('POST request received');
+    // const targetNode = objData.children.find(child => child.name === req.body.pos);
+    if (!targetNode.children) {
+        targetNode.children = [];
+    }
+
+    targetNode.children.push({ name: req.body.value});  // the name of new node
+    const inspectedData = util.inspect(objData, { depth: null });
+    console.log("result", inspectedData); 
+    console.log("result1", targetNode); 
+
+    const updatedJsonData = JSON.stringify(objData);
+    fs.writeFileSync('../src/examples/1.json', updatedJsonData);
+    
+    console.log('New child added to JSON data!');
 });
   
 
