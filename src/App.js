@@ -9,7 +9,7 @@ import MixedNodeInputElement from './components/MixedNodeInputElement';
 import './App.css';
 
 // Data examples
-import orgChartJson from './examples/3.json';
+import orgChartJson from './examples/1.json';
 import flareJson from './examples/d3-hierarchy-flare.json';
 import reactTree from './examples/reactRepoTree';
 import axios from 'axios'; 
@@ -74,18 +74,6 @@ const countNodes = (count = 0, n) => {
 
 // add data to Json file
 
-const addDataToJsonFile = async () => {
-   const newData = { name: 'John', age: 25 }; // Example new data to add
-  await axios.post('http://localhost:8080/api/add-node', newData)
-    .then(response => {
-      console.log('Data added to JSON file successfully');
-    })
-    .catch(error => {
-      console.error('Error adding data to JSON file:', error);
-    });
-};
-
-
 
 class App extends Component {
   constructor() {
@@ -110,7 +98,7 @@ class App extends Component {
       zoom: 1,
       scaleExtent: { min: 0.1, max: 10 },
       separation: { siblings: 2, nonSiblings: 2 },
-      nodeSize: { x: 200, y: 200 },
+      nodeSize: { x: 100, y: 100 },
       enableLegacyTransitions: true,
       transitionDuration: 500,
       renderCustomNodeElement: customNodeFnMapping['svg'].fn,
@@ -135,6 +123,7 @@ class App extends Component {
         },
       },
       selectedOption: '', 
+      add_node_name: '', 
     };
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -174,7 +163,9 @@ class App extends Component {
   setPathFunc(pathFunc) {
     this.setState({ pathFunc });
   }
-
+  add_name = (e) => {
+    this.setState({ add_node_name: e.target.value}); 
+  }
   handleChange(evt) {
     const target = evt.target;
     const parsedIntValue = parseInt(target.value, 10);
@@ -314,12 +305,24 @@ class App extends Component {
       translateY: dimensions.height / 2,
     });
   }
-  
+  addDataToJsonFile = () => {
+    const selectedElement = document.getElementById("newAddValue").value; 
+     const newData = { pos: selectedElement, value: this.state.add_node_name }; // Example new data to add
+    //  const newAddData = ",'children': [{'name':'" + this.state.add_node_name + "'}]"; 
+     axios.post('http://localhost:8080/api/add-node', newData)
+      .then(response => {
+        console.log('Data added to JSON file successfully');
+      })
+      .catch(error => {
+        console.error('Error adding data to JSON file:', error);
+      });
+  };
 
   render() {
 
     // const options = ['option1', 'option2', 'option3']; 
     const options = this.getAllNames(this.state.data);
+    console.log(this.state.data); 
     return (
       <div className="App">
         <div className="demo-container">
@@ -372,15 +375,23 @@ class App extends Component {
                   type="button"
                   className="btn btn-controls btn-block"
                   // onClick={() => this.addChildNode()}
-                  onClick={addDataToJsonFile}
+                  onClick={this.addDataToJsonFile}
                 >
                   Insert Node
                 </button>
-                <select className='form-control add_pos' value={this.state.selectedOption} onChange={this.selectChange}>
+                <select className='form-control add_pos' value={this.state.selectedOption} onChange={this.selectChange} id = "newAddValue">
                   {options.map((option, index) => (
                     <option key={index} value={option}>{option}</option>
                   ))}
                 </select>
+                <input
+                  className="form-control add_pos"
+                  style={{ color: 'grey' }}
+                  name="add_node_name"
+                  type="text"
+                  value={this.state.add_node_name}
+                  onChange={this.add_name}
+                />
                 <button
                   type="button"
                   className="btn btn-controls btn-block"

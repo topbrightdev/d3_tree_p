@@ -1,9 +1,10 @@
-{
-    "name": "Test 3",
+[
+  {
+    "name": "Test1",
     "children": [
-      {
-        "name": "Test 3: A", "children": [{"name" : "Test1"}] 
-      },
-      {"name": "Test 3: B"}, {"name": "Test 3: C"}
+      { "name": "Test1 : A", "children": [{ "name" : "Test1:AA", "children": [] }] },
+      { "name": "Test2" },
+      { "name": "Test3" }
     ]
   }
+]
